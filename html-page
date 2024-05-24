@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Green API Demo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-section {
+            margin-bottom: 20px;
+        }
+        .response {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+        }
+        .response pre {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Green API Demo</h1>
+
+    <div class="form-section">
+        <h2>Connection Settings</h2>
+        <label for="idInstance">idInstance:</label>
+        <input type="text" id="idInstance" name="idInstance"><br><br>
+        <label for="apiTokenInstance">ApiTokenInstance:</label>
+        <input type="text" id="apiTokenInstance" name="apiTokenInstance"><br><br>
+    </div>
+
+    <div class="form-section">
+        <h2>getSettings</h2>
+        <button onclick="callGetSettings()">Call getSettings</button>
+        <div class="response" id="getSettingsResponse"></div>
+    </div>
+
+    <div class="form-section">
+        <h2>getStateInstance</h2>
+        <button onclick="callGetStateInstance()">Call getStateInstance</button>
+        <div class="response" id="getStateInstanceResponse"></div>
+    </div>
+
+    <div class="form-section">
+        <h2>sendMessage</h2>
+        <label for="chatId">Chat ID:</label>
+        <input type="text" id="chatId" name="chatId"><br><br>
+        <label for="message">Message:</label>
+        <input type="text" id="message" name="message"><br><br>
+        <button onclick="callSendMessage()">Call sendMessage</button>
+        <div class="response" id="sendMessageResponse"></div>
+    </div>
+
+    <div class="form-section">
+        <h2>sendFileByUrl</h2>
+        <label for="fileChatId">Chat ID:</label>
+        <input type="text" id="fileChatId" name="fileChatId"><br><br>
+        <label for="fileUrl">File URL:</label>
+        <input type="text" id="fileUrl" name="fileUrl"><br><br>
+        <button onclick="callSendFileByUrl()">Call sendFileByUrl</button>
+        <div class="response" id="sendFileByUrlResponse"></div>
+    </div>
+
+    <script>
+        function getApiDetails() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            return { idInstance, apiTokenInstance };
+        }
+
+        async function callApi(endpoint, data, responseElementId) {
+            const { idInstance, apiTokenInstance } = getApiDetails();
+            const url = `https://api.green-api.com/${idInstance}/${endpoint}/${apiTokenInstance}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById(responseElementId).innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById(responseElementId).innerHTML = `<pre>${error}</pre>`;
+            }
+        }
+
+        function callGetSettings() {
+            callApi('getSettings', {}, 'getSettingsResponse');
+        }
+
+        function callGetStateInstance() {
+            callApi('getStateInstance', {}, 'getStateInstanceResponse');
+        }
+
+        function callSendMessage() {
+            const chatId = document.getElementById('chatId').value;
+            const message = document.getElementById('message').value;
+            callApi('sendMessage', { chatId, message }, 'sendMessageResponse');
+        }
+
+        function callSendFileByUrl() {
+            const chatId = document.getElementById('fileChatId').value;
+            const urlFile = document.getElementById('fileUrl').value;
+            callApi('sendFileByUrl', { chatId, urlFile }, 'sendFileByUrlResponse');
+        }
+    </script>
+</body>
+</html>
