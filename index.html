@@ -3,42 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green API Test</title>
+    <title>Green API Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
+        }
+        .form-container, .response-container {
+            width: 50%;
+            padding: 10px;
+            box-sizing: border-box;
         }
         .form-section {
             margin-bottom: 20px;
-            width: 100%;
-            max-width: 600px;
         }
         .form-section input {
-            width: 100%;
+            width: calc(100% - 22px);
             padding: 10px;
             margin-top: 10px;
             margin-bottom: 10px;
             box-sizing: border-box;
         }
         .form-section button {
-            padding: 10px 15px;
-            margin-top: 10px;
-            margin-bottom: 10px;
             width: 100%;
+            padding: 10px;
+            margin-top: 10px;
             cursor: pointer;
             box-sizing: border-box;
         }
         .response-section {
-            margin-left: 20px;
-            width: 100%;
-            max-width: 600px;
+            margin-top: 20px;
         }
         .response {
-            margin-top: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
@@ -51,29 +48,31 @@
     </style>
 </head>
 <body>
-    <div class="form-section">
-        <input type="text" id="idInstance" name="idInstance" placeholder="idInstance">
-        <input type="text" id="apiTokenInstance" name="apiTokenInstance" placeholder="ApiTokenInstance">
+    <div class="form-container">
+        <div class="form-section">
+            <input type="text" id="idInstance" name="idInstance" placeholder="idInstance">
+            <input type="text" id="apiTokenInstance" name="apiTokenInstance" placeholder="ApiTokenInstance">
+        </div>
+
+        <div class="form-section">
+            <button onclick="callGetSettings()">getSettings</button>
+            <button onclick="callGetStateInstance()">getStateInstance</button>
+        </div>
+
+        <div class="form-section">
+            <input type="text" id="chatIdMessage" name="chatIdMessage" placeholder="MessageID">
+            <input type="text" id="message" name="message" placeholder="Message">
+            <button onclick="callSendMessage()">sendMessage</button>
+        </div>
+
+        <div class="form-section">
+            <input type="text" id="chatIdFile" name="chatIdFile" placeholder="ChatID">
+            <input type="text" id="fileUrl" name="fileUrl" placeholder="FileURL">
+            <button onclick="callSendFileByUrl()">sendFileByUrl</button>
+        </div>
     </div>
 
-    <div class="form-section">
-        <button onclick="callGetSettings()">getSettings</button>
-        <button onclick="callGetStateInstance()">getStateInstance</button>
-    </div>
-
-    <div class="form-section">
-        <input type="text" id="chatIdMessage" name="chatIdMessage" placeholder="MessageID">
-        <input type="text" id="message" name="message" placeholder="Message">
-        <button onclick="callSendMessage()">sendMessage</button>
-    </div>
-
-    <div class="form-section">
-        <input type="text" id="chatIdFile" name="chatIdFile" placeholder="ChatID">
-        <input type="text" id="fileUrl" name="fileUrl" placeholder="FileURL">
-        <button onclick="callSendFileByUrl()">sendFileByUrl</button>
-    </div>
-
-    <div class="response-section">
+    <div class="response-container">
         <h2>Ответ</h2>
         <div class="response" id="response"></div>
     </div>
