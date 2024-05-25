@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green API Test</title>
+    <title>Green API Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -102,17 +102,17 @@
             return { idInstance, apiTokenInstance };
         }
 
-        async function callApi(endpoint, data, responseElementId) {
+        async function callApi(method, endpoint, data, responseElementId) {
             const { idInstance, apiTokenInstance } = getApiDetails();
-            const url = `https://api.green-api.com/${idInstance}/${endpoint}/${apiTokenInstance}`;
+            const url = `https://api.green-api.com/waInstance${idInstance}/${endpoint}/${apiTokenInstance}`;
 
             try {
                 const response = await fetch(url, {
-                    method: 'GET',
+                    method: method,
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify(data)
+                    body: method === 'POST' ? JSON.stringify(data) : undefined
                 });
                 const result = await response.json();
                 document.getElementById(responseElementId).innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
@@ -122,23 +122,23 @@
         }
 
         function callGetSettings() {
-            callApi('getSettings', {}, 'response');
+            callApi('GET', 'getSettings', {}, 'response');
         }
 
         function callGetStateInstance() {
-            callApi('getStateInstance', {}, 'response');
+            callApi('GET', 'getStateInstance', {}, 'response');
         }
 
         function callSendMessage() {
             const chatId = document.getElementById('chatIdMessage').value;
             const message = document.getElementById('message').value;
-            callApi('sendMessage', { chatId, message }, 'response');
+            callApi('POST', 'sendMessage', { chatId, message }, 'response');
         }
 
         function callSendFileByUrl() {
             const chatId = document.getElementById('chatIdFile').value;
             const urlFile = document.getElementById('fileUrl').value;
-            callApi('sendFileByUrl', { chatId, urlFile }, 'response');
+            callApi('POST', 'sendFileByUrl', { chatId, urlFile }, 'response');
         }
     </script>
 </body>
