@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green API Test</title>
+    <title>Green API Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,3 +49,70 @@
 </head>
 <body>
     <div class="form-section">
+        <input type="text" id="idInstance" name="idInstance" placeholder="idInstance">
+        <input type="text" id="apiTokenInstance" name="apiTokenInstance" placeholder="ApiTokenInstance">
+        <button onclick="callGetSettings()">getSettings</button>
+        <button onclick="callGetStateInstance()">getStateInstance</button>
+
+        <input type="text" id="chatIdMessage" name="chatIdMessage" placeholder="MessageID">
+        <input type="text" id="message" name="message" placeholder="Message">
+        <button onclick="callSendMessage()">sendMessage</button>
+
+        <input type="text" id="chatIdFile" name="chatIdFile" placeholder="ChatID">
+        <input type="text" id="fileUrl" name="fileUrl" placeholder="FileURL">
+        <button onclick="callSendFileByUrl()">sendFileByUrl</button>
+    </div>
+
+    <div class="response-section">
+        <h2>Ответ</h2>
+        <div class="response" id="response"></div>
+    </div>
+
+    <script>
+        function getApiDetails() {
+            const idInstance = document.getElementById('idInstance').value;
+            const apiTokenInstance = document.getElementById('apiTokenInstance').value;
+            return { idInstance, apiTokenInstance };
+        }
+
+        async function callApi(endpoint, data, responseElementId) {
+            const { idInstance, apiTokenInstance } = getApiDetails();
+            const url = `https://api.green-api.com/${idInstance}/${endpoint}/${apiTokenInstance}`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                const result = await response.json();
+                document.getElementById(responseElementId).innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+            } catch (error) {
+                document.getElementById(responseElementId).innerHTML = `<pre>${error}</pre>`;
+            }
+        }
+
+        function callGetSettings() {
+            callApi('getSettings', {}, 'response');
+        }
+
+        function callGetStateInstance() {
+            callApi('getStateInstance', {}, 'response');
+        }
+
+        function callSendMessage() {
+            const chatId = document.getElementById('chatIdMessage').value;
+            const message = document.getElementById('message').value;
+            callApi('sendMessage', { chatId, message }, 'response');
+        }
+
+        function callSendFileByUrl() {
+            const chatId = document.getElementById('chatIdFile').value;
+            const urlFile = document.getElementById('fileUrl').value;
+            callApi('sendFileByUrl', { chatId, urlFile }, 'response');
+        }
+    </script>
+</body>
+</html>
