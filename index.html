@@ -8,18 +8,37 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         .form-section {
             margin-bottom: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .form-section input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            box-sizing: border-box;
         }
         .response {
             margin-top: 10px;
             padding: 10px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
+            max-width: 600px;
+            width: 100%;
         }
         .response pre {
             margin: 0;
+        }
+        button {
+            padding: 10px 15px;
+            margin-top: 10px;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -27,43 +46,27 @@
     <h1>Green API Demo</h1>
 
     <div class="form-section">
-        <h2>Connection Settings</h2>
-        <label for="idInstance">idInstance:</label>
-        <input type="text" id="idInstance" name="idInstance"><br><br>
-        <label for="apiTokenInstance">ApiTokenInstance:</label>
-        <input type="text" id="apiTokenInstance" name="apiTokenInstance"><br><br>
+        <input type="text" id="idInstance" name="idInstance" placeholder="idInstance">
+        <input type="text" id="apiTokenInstance" name="apiTokenInstance" placeholder="ApiTokenInstance">
+        <button onclick="callGetSettings()">getSettings</button>
+        <button onclick="callGetStateInstance()">getStateInstance</button>
     </div>
 
     <div class="form-section">
-        <h2>getSettings</h2>
-        <button onclick="callGetSettings()">Call getSettings</button>
-        <div class="response" id="getSettingsResponse"></div>
+        <input type="text" id="chatIdMessage" name="chatIdMessage" placeholder="MessageID">
+        <input type="text" id="message" name="message" placeholder="Message">
+        <button onclick="callSendMessage()">sendMessage</button>
     </div>
 
     <div class="form-section">
-        <h2>getStateInstance</h2>
-        <button onclick="callGetStateInstance()">Call getStateInstance</button>
-        <div class="response" id="getStateInstanceResponse"></div>
+        <input type="text" id="chatIdFile" name="chatIdFile" placeholder="ChatID">
+        <input type="text" id="fileUrl" name="fileUrl" placeholder="FileURL">
+        <button onclick="callSendFileByUrl()">sendFileByUrl</button>
     </div>
 
     <div class="form-section">
-        <h2>sendMessage</h2>
-        <label for="chatId">Chat ID:</label>
-        <input type="text" id="chatId" name="chatId"><br><br>
-        <label for="message">Message:</label>
-        <input type="text" id="message" name="message"><br><br>
-        <button onclick="callSendMessage()">Call sendMessage</button>
-        <div class="response" id="sendMessageResponse"></div>
-    </div>
-
-    <div class="form-section">
-        <h2>sendFileByUrl</h2>
-        <label for="fileChatId">Chat ID:</label>
-        <input type="text" id="fileChatId" name="fileChatId"><br><br>
-        <label for="fileUrl">File URL:</label>
-        <input type="text" id="fileUrl" name="fileUrl"><br><br>
-        <button onclick="callSendFileByUrl()">Call sendFileByUrl</button>
-        <div class="response" id="sendFileByUrlResponse"></div>
+        <h2>Ответ</h2>
+        <div class="response" id="response"></div>
     </div>
 
     <script>
@@ -93,23 +96,23 @@
         }
 
         function callGetSettings() {
-            callApi('getSettings', {}, 'getSettingsResponse');
+            callApi('getSettings', {}, 'response');
         }
 
         function callGetStateInstance() {
-            callApi('getStateInstance', {}, 'getStateInstanceResponse');
+            callApi('getStateInstance', {}, 'response');
         }
 
         function callSendMessage() {
-            const chatId = document.getElementById('chatId').value;
+            const chatId = document.getElementById('chatIdMessage').value;
             const message = document.getElementById('message').value;
-            callApi('sendMessage', { chatId, message }, 'sendMessageResponse');
+            callApi('sendMessage', { chatId, message }, 'response');
         }
 
         function callSendFileByUrl() {
-            const chatId = document.getElementById('fileChatId').value;
+            const chatId = document.getElementById('chatIdFile').value;
             const urlFile = document.getElementById('fileUrl').value;
-            callApi('sendFileByUrl', { chatId, urlFile }, 'sendFileByUrlResponse');
+            callApi('sendFileByUrl', { chatId, urlFile }, 'response');
         }
     </script>
 </body>
